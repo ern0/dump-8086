@@ -29,6 +29,9 @@ dump:
 	lea 	si,[dump_regmap]
 	lea 	bx,[3 + dump_template]
 
+	mov	ax,word [dump_reglist + MEMDUMP_REG]
+	mov	[dump_regname],ax
+
 dump_xreg:
 	mov 	bp,sp
 	add 	bp,[si]
@@ -142,7 +145,9 @@ dump_template:
 	db 	"DI=.... "
 	db 	"BP=.... "
 	db 	"SP=....",10
-	db 	"[DI]=$"
+	db 	"["
+dump_regname:
+	db	"DI]=$"
 
 dump_mem:
 	db 	".... $"
@@ -150,8 +155,17 @@ dump_mem:
 dump_crlf:
 	db 	13,10,10,"$"
 
+dump_reglist:
+	db	"DI"
+	db	"SI"
+	db	"BP"
+	db	"SP"
+	db	"BX"
+	db	"DX"
+	db	"CX"
+	db	"AX"
+
 dump_regmap:
-	; DI, SI, BP, SP, BX, DX, CX, AX
 	dw 	14	; AX
 	dw	8	; BX
 	dw	12	; CX
